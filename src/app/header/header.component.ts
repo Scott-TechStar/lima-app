@@ -16,6 +16,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   }
+  status = false;
+  addToggle()
+  {
+    this.status = !this.status;       
+  }
   onLoadServer(id: number) {
     // complex calculation
     this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
