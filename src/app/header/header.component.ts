@@ -1,0 +1,33 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../auth.service';
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+
+export class HeaderComponent implements OnInit {
+
+  LoggedIn = false;
+  constructor(private router: Router, private authService: AuthService) { }
+
+  ngOnInit() {
+  }
+  onLoadServer(id: number) {
+    // complex calculation
+    this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
+  }
+  onLogin() {
+    this.authService.login();
+    this.LoggedIn = true;
+  }
+  onLogout() {
+    this.authService.logout();
+    this.LoggedIn = false;
+    this.router.navigate(['/']);
+  }
+
+}
