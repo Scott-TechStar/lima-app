@@ -21,6 +21,9 @@ import { ServerResolver } from './servers/server/server-resolver.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FeedingComponent } from './feeding/feeding.component';
+import { MedicineComponent } from './medicine/medicine.component';
+import { HousingComponent } from './housing/housing.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ErrorPageComponent,
     HeaderComponent,
     FooterComponent,
-    DashboardComponent
+    DashboardComponent,
+    FeedingComponent,
+    MedicineComponent,
+    HousingComponent
   ],
   imports: [
     BrowserModule,

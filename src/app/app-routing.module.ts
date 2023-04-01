@@ -13,13 +13,15 @@ import { CanDeactivateGuard } from './servers/edit-server/can-deactivate-guard.s
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ServerResolver } from './servers/server/server-resolver.service';
 import { DashboardComponent } from './dashboard/dashboard.component'; 
+import { FeedingComponent } from './feeding/feeding.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'users', component: UsersComponent, children: [
     { path: ':id/:name', component: UserComponent }
   ] },
-  { path: '/dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'feeding', component: FeedingComponent },
   {
     path: 'servers',
     // canActivate: [AuthGuard],
