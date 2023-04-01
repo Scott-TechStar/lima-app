@@ -68,6 +68,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "github-pages": {
+              "baseHref": "/lima-app/"
+            },
             "production": {
               "browserTarget": "first-app:build:production"
             },

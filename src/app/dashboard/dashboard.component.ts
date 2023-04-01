@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 //Sidebar toggle show hide function
-status = true;
+status = false;
 addToggle()
 {
   this.status = !this.status;       
