@@ -1132,6 +1132,7 @@ input.text-white::placeholder {
     -webkit-transform: translateY(-5rem);
     transform: translateY(-5rem);
     z-index: 9999;
+    padding-top: 70px;
     position: relative
 }
 
@@ -3078,6 +3079,7 @@ body {
   background: lightblue;
   overflow-x: hidden;
 }
+/**/
 /* SIDEBAR */
 #sidebar {
   position: fixed;
@@ -3570,3 +3572,6 @@ body {
     min-width: 420px;
   }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

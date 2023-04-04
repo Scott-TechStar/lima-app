@@ -27,11 +27,11 @@ export class HeaderComponent implements OnInit {
   }
   onLogin() {
     this.authService.login();
-    this.LoggedIn = true;
+    this.status = true;
   }
   onLogout() {
     this.authService.logout();
-    this.LoggedIn = false;
+    this.status = false;
     this.router.navigate(['/']);
   }
 
