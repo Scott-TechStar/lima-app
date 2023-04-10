@@ -1,68 +1,85 @@
-<nav class="navbar navbar-inverse">
+<!--Navigation bar-->
+<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#limabar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+              aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        Menu
       </button>
-      <a href="/" class="navbar-brand">Li<em>MA</em></a>
+      <a class="navbar-brand" href="/">LIMA</a>
     </div>
 
-    <div class="collapse navbar-collapse" id="limabar">
+    <div class="spacer"></div>
+    <div id="navbar" class="navbar-collapse collapse" style="height: 1px;" >
+
+      <!--navbar left-->
       <ul class="nav navbar-nav menu">
-        <li routerLinkActive="active"
+          <li routerLinkActive="active"
             [routerLinkActiveOptions]="{exact: true}">
-          <a routerLink="/">Home</a>
-        </li>
-        <li routerLinkActive="active">
-          <a routerLink="servers">Servers</a>
-        </li>
-        <li routerLinkActive="active">
-          <a [routerLink]="['users']">Users</a>
-        </li>
-        <li routerLinkActive="active">
-          <a [routerLink]="['dashboard']">Dashboard</a>
-        </li>
-        <li routerLinkActive="active">
-            <button class="btn btn-success navbar-btn" (click)="onLoadServer(1)">Load Server 1</button>
-        </li>
-        <li routerLinkActive="active">
-          <a [routerLink]="['shop']">Shop</a>
-        </li>
+            <a routerLink="/">Home</a>
+          </li>
+          <li routerLinkActive="active">
+            <a [routerLink]="['users']">Connect</a>
+          </li>
+          <li routerLinkActive="active">
+            <a [routerLink]="['dashboard']">Dashboard</a>
+          </li>
+          <li routerLinkActive="active">
+            <a [routerLink]="['posts']">Posts</a>
+          </li>
       </ul>
-      <form class="navbar-form navbar-left search" action="#">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" name="search">
-          <div class="input-group-btn">
-            <button type="submit" class="btn btn-info">
-              <i class="glyphicon glyphicon-search"></i>Search
-            </button>    
-          </div>
-        </div>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li routerLinkActive="active">
-          <button *ngIf="!LoggedIn" class="btn btn-primary navbar-btn" (click)="onLogin()">
-            <span class="glyphicon glyphicon-user"></span>Login
-          </button>
-        </li>
-        <li routerLinkActive="active">
-          <button *ngIf="LoggedIn" class="btn btn-primary navbar-btn" (click)="onLogout()">
-            <span class="glyphicon glyphicon-log-out"></span>Logout
-          </button>
-        </li>
-        <li class="dropdown" appDropdown *ngIf="LoggedIn">
-          <a style="cursor: pointer;" class="dropdown-toggle" data-toggle="dropdown" role="button">Profile <span class="caret"></span></a>
+
+      <!--authenticated-->
+      <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated">
+        <li class="dropdown" appDropdown>
+          <a style="cursor: pointer;" class="dropdown-toggle" data-toggle="dropdown" role="button">
+            <i class="fa fa-user"></i> Welcome {{user}}<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a style="cursor: pointer;" >Settigs</a></li>
-            <li><a style="cursor: pointer;">Teams</a></li>
-            <li><a style="cursor: pointer;">Register</a></li>
-            <li><a style="cursor: pointer;">LogOut</a></li>
+            <li role="menuitem"><a class="dropdown-item" [routerLink]="['/profile/']"><i class="fa fa-user"></i> My Profile</a></li>
+            <li class="divider"></li>
+            <li><a class="dropdown-item" (click)="onLogout()" style="cursor: pointer"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>
         </li>
       </ul>
+
+      <!--not authenticated-->
+      <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated">
+        <li routerLinkActive="active" class="dropdown" appDropdown>
+          <button  class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown" (click)="onLogin()">
+            <span class="glyphicon glyphicon-user"></span>Account<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="onLogin()"><i class="fa fa-sign-up">
+              </i> SignUp</a>
+           </li>
+            <li class="divider"></li>
+            <li><a class="dropdown-item" (click)="onLogin()" style="cursor: pointer">
+              <i class="fa fa-sign-in"></i> SignIn</a>
+            </li>
+            <li><a class="dropdown-item" (click)="onLogin()" style="cursor: pointer">
+              <mat-icon>help</mat-icon> Help</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
     </div>
+
   </div>
 </nav>
+
+<!--Sidebar-->
+<!-- <div class="col-md-2 sidebar" [ngClass]="!isAuthenticated ? 'hide' : ''">
+  <ul class="nav nav-sidebar">
+    <li routerLinkActive="active"><a [routerLink]="['/home']" ><mat-icon>home</mat-icon><span>Home</span></a></li>
+    <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>person</mat-icon><span>Profile</span></a></li>
+    <li routerLinkActive="active"><a [routerLink]="['/lists']" ><mat-icon>help</mat-icon><span>Help</span></a></li>
+    <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>messages</mat-icon><span>Messages</span></a></li>
+    <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>settings</mat-icon><span>Settings</span></a></li>
+    <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>teams</mat-icon><span>Teams</span></a></li>
+
+  </ul>
+</div> -->

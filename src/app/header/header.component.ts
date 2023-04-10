@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +12,16 @@ import { AuthService } from '../auth.service';
 
 export class HeaderComponent implements OnInit {
 
-  LoggedIn = false;
+  isAuthenticated = false;
+  private userSub : Subscription;
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
+    this.userSub = this.authService.user.subscribe(user => {
+      this.isAuthenticated = !!user;
+      console.log(!user);
+      console.log(!!user);
+    });
   }
   status = false;
   addToggle()
@@ -26,13 +33,15 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
   }
   onLogin() {
-    this.authService.login();
-    this.LoggedIn = true;
+    this.router.navigate(['auth'])
+    
   }
   onLogout() {
     this.authService.logout();
-    this.LoggedIn = false;
-    this.router.navigate(['/']);
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 
 }
