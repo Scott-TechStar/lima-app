@@ -16,33 +16,27 @@
     <div id="navbar" class="navbar-collapse collapse" style="height: 1px;" >
 
       <!--navbar left-->
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav menu">
           <li routerLinkActive="active"
             [routerLinkActiveOptions]="{exact: true}">
             <a routerLink="/">Home</a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="servers">Servers</a>
-          </li>
-          <li routerLinkActive="active">
-            <a [routerLink]="['users']">Users</a>
+            <a [routerLink]="['users']">Connect</a>
           </li>
           <li routerLinkActive="active">
             <a [routerLink]="['dashboard']">Dashboard</a>
           </li>
           <li routerLinkActive="active">
-              <a href="#" (click)="onLoadServer(1)">Load Server 1</a>
-          </li>
-          <li routerLinkActive="active">
-            <a [routerLink]="['shop']">Shop</a>
+            <a [routerLink]="['posts']">Posts</a>
           </li>
       </ul>
 
       <!--authenticated-->
-      <ul class="nav navbar-nav navbar-right" *ngIf="status">
-        <li class="dropdown" AppDropdown>
+      <ul class="nav navbar-nav navbar-right" *ngIf="isAuthenticated">
+        <li class="dropdown" appDropdown>
           <a style="cursor: pointer;" class="dropdown-toggle" data-toggle="dropdown" role="button">
-            <i class="fa fa-user"></i> Welcome Boss<span class="caret"></span></a>
+            <i class="fa fa-user"></i> Welcome {{user}}<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li role="menuitem"><a class="dropdown-item" [routerLink]="['/profile/']"><i class="fa fa-user"></i> My Profile</a></li>
             <li class="divider"></li>
@@ -52,16 +46,23 @@
       </ul>
 
       <!--not authenticated-->
-      <ul class="nav navbar-nav navbar-right" *ngIf="!status">
-        <li routerLinkActive="active">
-          <button  class="btn btn-primary navbar-btn" (click)="onLogin()">
-            <span class="glyphicon glyphicon-user"></span>SignUp
+      <ul class="nav navbar-nav navbar-right" *ngIf="!isAuthenticated">
+        <li routerLinkActive="active" class="dropdown" appDropdown>
+          <button  class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown" (click)="onLogin()">
+            <span class="glyphicon glyphicon-user"></span>Account<span class="caret"></span>
           </button>
-        </li> |
-        <li routerLinkActive="active">
-          <button  class="btn btn-primary navbar-btn" (click)="onLogin()">
-            <span class="glyphicon glyphicon-user"></span>Login
-          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="onLogin()"><i class="fa fa-sign-up">
+              </i> SignUp</a>
+           </li>
+            <li class="divider"></li>
+            <li><a class="dropdown-item" (click)="onLogin()" style="cursor: pointer">
+              <i class="fa fa-sign-in"></i> SignIn</a>
+            </li>
+            <li><a class="dropdown-item" (click)="onLogin()" style="cursor: pointer">
+              <mat-icon>help</mat-icon> Help</a>
+            </li>
+          </ul>
         </li>
       </ul>
 
@@ -71,7 +72,7 @@
 </nav>
 
 <!--Sidebar-->
-<div class="col-md-2 sidebar" [ngClass]="!status ? 'hide' : ''">
+<!-- <div class="col-md-2 sidebar" [ngClass]="!isAuthenticated ? 'hide' : ''">
   <ul class="nav nav-sidebar">
     <li routerLinkActive="active"><a [routerLink]="['/home']" ><mat-icon>home</mat-icon><span>Home</span></a></li>
     <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>person</mat-icon><span>Profile</span></a></li>
@@ -81,4 +82,4 @@
     <li routerLinkActive="active"><a [routerLink]="['/messages']"><mat-icon>teams</mat-icon><span>Teams</span></a></li>
 
   </ul>
-</div>
+</div> -->

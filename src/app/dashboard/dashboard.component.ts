@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +20,7 @@ addToggle()
 }
 
 onLogin() {
-  this.authService.login();
+ // this.authService.login();
 }
 
 onLogout() {

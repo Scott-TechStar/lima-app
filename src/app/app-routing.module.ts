@@ -8,12 +8,14 @@ import { ServersComponent } from './servers/servers.component';
 import { UserComponent } from './users/user/user.component';
 import { UsersComponent } from './users/users.component';
 import { HomeComponent } from './home/home.component';
-import { AuthGuard } from './auth-guard.service';
+import { AuthGuard } from './auth/auth-guard.service';
 import { CanDeactivateGuard } from './servers/edit-server/can-deactivate-guard.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ServerResolver } from './servers/server/server-resolver.service';
 import { DashboardComponent } from './dashboard/dashboard.component'; 
 import { FeedingComponent } from './feeding/feeding.component';
+import { PostsComponent } from './posts/posts.component';
+import { AuthComponent } from './auth/auth.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +24,8 @@ const appRoutes: Routes = [
   ] },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'feeding', component: FeedingComponent },
+  { path: 'posts', component: PostsComponent, canActivate: [AuthGuard]},
+  { path: 'auth', component: AuthComponent },
   {
     path: 'servers',
     // canActivate: [AuthGuard],
