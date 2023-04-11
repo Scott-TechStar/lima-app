@@ -24,7 +24,9 @@ const appRoutes: Routes = [
   ] },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'feeding', component: FeedingComponent },
-  { path: 'posts', component: PostsComponent, canActivate: [AuthGuard]},
+  { path: 'posts', component: PostsComponent,
+   //canActivate: [AuthGuard]
+  },
   { path: 'auth', component: AuthComponent },
   {
     path: 'servers',
