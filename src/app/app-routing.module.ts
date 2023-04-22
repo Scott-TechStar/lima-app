@@ -8,17 +8,32 @@ import { ServersComponent } from './servers/servers.component';
 import { UserComponent } from './users/user/user.component';
 import { UsersComponent } from './users/users.component';
 import { HomeComponent } from './home/home.component';
-import { AuthGuard } from './auth/auth-guard.service';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AdminComponent } from './admin/admin.component';
+import { DealerComponent } from './dealer/dealer.component';
+import { FarmerComponent } from './farmer/farmer.component';
+import { UsertypeComponent } from './usertype/usertype.component';
+
+
 import { CanDeactivateGuard } from './servers/edit-server/can-deactivate-guard.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ServerResolver } from './servers/server/server-resolver.service';
 import { DashboardComponent } from './dashboard/dashboard.component'; 
 import { FeedingComponent } from './feeding/feeding.component';
 import { PostsComponent } from './posts/posts.component';
-import { AuthComponent } from './auth/auth.component';
 
 const appRoutes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'usertype', component: UsertypeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'farmer', component: FarmerComponent },
+  { path: 'dealer', component: DealerComponent },
+  { path: 'admin', component: AdminComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'users', component: UsersComponent, children: [
     { path: ':id/:name', component: UserComponent }
   ] },
@@ -27,11 +42,9 @@ const appRoutes: Routes = [
   { path: 'posts', component: PostsComponent,
    //canActivate: [AuthGuard]
   },
-  { path: 'auth', component: AuthComponent },
   {
     path: 'servers',
     // canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
     component: ServersComponent,
     children: [
     { path: ':id', component: ServerComponent, resolve: {server: ServerResolver} },

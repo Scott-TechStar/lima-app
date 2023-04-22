@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
+import { StorageService } from '../auth/storage.service';
+import { EventBusService } from '../shared/event-bus.service';
 
 @Component({
   selector: 'app-header',
@@ -12,15 +14,38 @@ import { AuthService } from '../auth/auth.service';
 
 export class HeaderComponent implements OnInit {
 
-  isAuthenticated = false;
-  private userSub : Subscription;
-  constructor(private router: Router, private authService: AuthService) { }
+  public roles: string[] = [];
+  isLoggedIn = false;
+  admin = false;
+  dealer = false;
+  username?: string;
+  role = '';
+ 
+ eventBusSub?: Subscription;
+ 
+  constructor(
+  private router: Router, 
+  private authService: AuthService,
+  private storageService: StorageService,
+  private eventBusService: EventBusService
+  ) { }
 
-  ngOnInit() {
-    this.userSub = this.authService.user.subscribe(user => {
-      this.isAuthenticated = !!user;
-      console.log(!user);
-      console.log(!!user);
+  ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+      this.role = user.roles;
+
+      this.admin = this.roles.includes('ADMIN');
+      this.dealer = this.roles.includes('DRIVER');
+
+      this.username = user.username;
+    }
+
+    this.eventBusSub = this.eventBusService.on('logout', () => {
+      this.logout();
     });
   }
   status = false;
@@ -32,16 +57,24 @@ export class HeaderComponent implements OnInit {
     // complex calculation
     this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
   }
-  onLogin() {
-    this.router.navigate(['auth'])
+  onSignUp() {
+    this.router.navigate(['/register'])
     
   }
-  onLogout() {
-    this.authService.logout();
-  }
+  
+  //logout
+    logout(): void {
+    this.authService.logout().subscribe({
+      next: res => {
+        console.log(res);
+        this.storageService.clean();
 
-  ngOnDestroy() {
-    this.userSub.unsubscribe();
+        window.location.reload();
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
 }

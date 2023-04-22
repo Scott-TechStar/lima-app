@@ -16,7 +16,9 @@ import { ServersService } from './servers/servers.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './auth/auth.service';
-import { AuthGuard } from './auth/auth-guard.service';
+import { httpInterceptorProviders } from './auth/http.interceptor';
+import { ProfileComponent } from './profile/profile.component';
+
 import { CanDeactivateGuard } from './servers/edit-server/can-deactivate-guard.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ServerResolver } from './servers/server/server-resolver.service';
@@ -33,10 +35,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { PostsComponent } from './posts/posts.component';
-import { AuthComponent } from './auth/auth.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { InterceptorService } from './auth/interceptors.service';
 
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+
+//boards
+import { AdminComponent } from './admin/admin.component';
+import { DealerComponent } from './dealer/dealer.component';
+import { FarmerComponent } from './farmer/farmer.component';
+import { UsertypeComponent } from './usertype/usertype.component';
 
 @NgModule({
   declarations: [
@@ -56,8 +64,14 @@ import { InterceptorService } from './auth/interceptors.service';
     MedicineComponent,
     HousingComponent,
     PostsComponent,
-    AuthComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ProfileComponent,
+    LoginComponent,
+    RegisterComponent,
+    AdminComponent,
+    DealerComponent,
+    FarmerComponent,
+    UsertypeComponent
   ],
   imports: [
     BrowserModule,
@@ -74,14 +88,9 @@ import { InterceptorService } from './auth/interceptors.service';
   providers: [
     ServersService, 
     AuthService, 
-    AuthGuard, 
     CanDeactivateGuard, 
     ServerResolver,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
-      multi: true
-    }
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

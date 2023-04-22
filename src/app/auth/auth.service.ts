@@ -1,140 +1,43 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { EmailValidator } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Subject, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
-import { User } from "./user.model";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-//interface
+const AUTH_API = 'http://localhost:8080/api/auth/';
 
-export interface AuthResData {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
-}
-@Injectable({providedIn: 'root'})
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
+  constructor(private http: HttpClient) {}
 
-  //creating a Subject incase for existing user. nexting users
-  user = new Subject<User>();
-  private tokenExpTimer: any;
-  constructor(private router: Router, private http: HttpClient){}
-  signUp(email: string, password: string){
-    return this.http.post<AuthResData >('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyALG5qFUmzRfRJMRCNJz36P4o_J7Mpn5H0',
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(
+      AUTH_API + 'signin',
       {
-        email: email,
-        password: password,
-        returnSecureToken: true
-      }
-    ).pipe(catchError(this.handleError), tap(resData => {
-      this.handleAuthentication(
-        resData.email,
-        resData.localId,
-        resData.idToken,
-        +resData.expiresIn
-      );
-    }));
-  }
-
-  login(email: string, password: string) {
-    return this.http.post<AuthResData>(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyALG5qFUmzRfRJMRCNJz36P4o_J7Mpn5H0',
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true
-        }
-      ).pipe(catchError(this.handleError), tap(resData =>{
-        this.handleAuthentication(
-          resData.email,
-          resData.localId,
-          resData.idToken,
-          +resData.expiresIn
-        );
-      }));
-
-    //this.loggedIn = true;
-    //this.router.navigate(['/auth']);
-  }
-
-  //AutoLogin Users
-  autoLogin(){
-    const userData: {
-      email: string;
-      id: string;
-      _token: string;
-      _tokenExpDate: string;
-    } = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) {
-      return;
-    }
-
-    const loadedUser = new User(
-      userData.email,
-      userData.id,
-      userData._token,
-      new Date(userData._tokenExpDate)
+        username,
+        password,
+      },
+      httpOptions
     );
-
-    if (loadedUser.token) {
-      this.user.next(loadedUser);
-      const expDuration =
-        new Date(userData._tokenExpDate).getTime() -
-        new Date().getTime();
-      this.autoLogout(expDuration);
-    }
   }
 
-
-//logout the user
-  logout() {
-    this.user.next(null);
-    this.router.navigate(['/auth']);
-    localStorage.removeItem('userData');
-    if (this.tokenExpTimer) {
-      clearTimeout(this.tokenExpTimer);
-    }
-    this.tokenExpTimer = null;
-  }
-//An AutoLogout after some time of inactivity
-  autoLogout(expDuration: number) {
-    this.tokenExpTimer = setTimeout(() => {
-      this.logout();
-    }, expDuration);
+  register(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(
+      AUTH_API + 'signup',
+      {
+        username,
+        email,
+        password,
+      },
+      httpOptions
+    );
   }
 
-  private handleAuthentication(
-    email: string,
-    userId: string,
-    token: string,
-    expiresIn: number
-  ) {
-    const expDate = new Date(new Date().getTime() + expiresIn * 1000);
-    const user = new User(email, userId, token, expDate);
-    this.user.next(user);
-  }
-
-  private handleError(errorRes: HttpErrorResponse) {
-    let errorMessage = 'An unknown error occurred!';
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError(errorMessage);
-    }
-    switch (errorRes.error.error.message) {
-      case 'EMAIL_EXISTS':
-        errorMessage = 'This email exists already';
-        break;
-      case 'EMAIL_NOT_FOUND':
-        errorMessage = 'This email does not exist.';
-        break;
-      case 'INVALID_PASSWORD':
-        errorMessage = 'This password is not correct.';
-        break;
-    }
-    return throwError(errorMessage);
+  logout(): Observable<any> {
+    return this.http.post(AUTH_API + 'signout', { }, httpOptions);
   }
 }
